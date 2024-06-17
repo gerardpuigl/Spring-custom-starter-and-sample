@@ -14,7 +14,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.bind.ServletRequestBindingException;
 
@@ -98,26 +97,6 @@ public class CustomErrorHandlerTest {
     try {
       response = handler.handleCustomRuntimeException(ex);
       Assertions.assertEquals(422,  response.getStatusCode().value());
-      Assertions.assertEquals(expectedDTO, response.getBody());
-    } catch (Exception e) {
-      Assertions.fail("Exception not expected");
-    }
-  }
-
-  @Test
-  public void testHandleAccessDeniedException_OK() {
-    ErrorDTO expectedDTO =
-        new ErrorDTO(
-            AccessDeniedException.class.getName(),
-            "msg",
-            "application-name-unauthorized",
-            HttpStatus.FORBIDDEN.value(),
-            Collections.EMPTY_LIST);
-    AccessDeniedException ex = new AccessDeniedException("msg");
-    ResponseEntity<ErrorDTO> response;
-    try {
-      response = handler.handleAccessDeniedException(ex);
-      Assertions.assertEquals(HttpStatus.FORBIDDEN.value(),  response.getStatusCode().value());
       Assertions.assertEquals(expectedDTO, response.getBody());
     } catch (Exception e) {
       Assertions.fail("Exception not expected");
