@@ -10,26 +10,31 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>spring-boot-custom-starter-web</artifactId>
+    <artifactId>spring-boot-custom-starter-web-security</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
-
-      <!-- Web Rest dependencies -->
+      <!-- Web Rest Security dependencies -->
       <dependency>
         <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
+        <artifactId>spring-boot-starter-security</artifactId>
       </dependency>
 
       <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-validation</artifactId>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-oauth2-resource-server</artifactId>
       </dependency>
 
       <!--   Module dependencies     -->
       <dependency>
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
+        <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>jakarta.servlet</groupId>
+        <artifactId>jakarta.servlet-api</artifactId>
         <scope>provided</scope>
       </dependency>
 
@@ -42,7 +47,19 @@
 
       <dependency>
         <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-test</artifactId>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-test</artifactId>
         <scope>test</scope>
       </dependency>
     </dependencies>
