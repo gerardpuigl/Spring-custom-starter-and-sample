@@ -1,4 +1,4 @@
-package com.gerardpuig.ms.example;
+package com.ms.sample;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
