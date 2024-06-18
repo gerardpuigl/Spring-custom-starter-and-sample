@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.custom.starter.web.exception.CustomRuntimeException.InvalidParam;
 import com.custom.starter.web.exception.dto.ErrorDTO;
 import com.custom.starter.web.exception.dto.InvalidParamDTO;
-import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,6 +24,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.util.MimeType;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
@@ -235,7 +235,6 @@ public class CommonWebErrorHandler {
   }
 
   // Helpers
-
   protected ResponseEntity<ErrorDTO> buildResponseEntity(
       String title,
       String detail,

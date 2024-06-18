@@ -6,7 +6,8 @@ This is used as starter for all our rest ms.
 ## What includes?
 1. **Common dependencies** for web microservices.
 2. **Custom runtime exception handling**. Provides a common exception handling to standarize the common error responses
-6. **Jackson common configuration**.
+3. **Jackson common configuration**.
+4. **Security configuration**
 
 ## Setup
 

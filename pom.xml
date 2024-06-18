@@ -17,7 +17,6 @@
 
     <modules>
         <module>spring-boot-custom-starter-web</module>
-        <module>spring-boot-custom-starter-web-security</module>
         <module>spring-boot-custom-starter-sample-app</module>
     </modules>
 

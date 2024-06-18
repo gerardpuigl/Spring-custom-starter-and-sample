@@ -1,5 +1,6 @@
-package com.custom.starter.web.security;
+package com.custom.starter.web.security.application;
 
+import com.custom.starter.web.security.SecurityConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;

@@ -1,16 +1,15 @@
-package com.custom.starter.web.security.config;
+package com.custom.starter.web.security;
 
-import com.custom.starter.web.security.TestApplication;
+import com.custom.starter.web.security.application.TestApplication;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest(classes = TestApplication.class)
 @AutoConfigureMockMvc
@@ -20,17 +19,20 @@ public class WebSecurityConfigTests {
 
   @Test
   void healthEndpoint_withNoAuthenticatedUserRequest() throws Exception {
-    mvc.perform(get("/health").contentType(MediaType.TEXT_PLAIN)).andExpect(status().isOk());
+    mvc.perform(get("/health").contentType(MediaType.TEXT_PLAIN))
+        .andExpect(status().isOk());
   }
 
   @Test
   void infoEndpoint_withNoAuthenticatedUserRequest() throws Exception {
-    mvc.perform(get("/info").contentType(MediaType.TEXT_PLAIN)).andExpect(status().isOk());
+    mvc.perform(get("/info").contentType(MediaType.TEXT_PLAIN))
+        .andExpect(status().isOk());
   }
 
   @Test
   void metricsEndpoint_withNoAuthenticatedUserRequest() throws Exception {
-    mvc.perform(get("/metrics").contentType(MediaType.TEXT_PLAIN)).andExpect(status().isOk());
+    mvc.perform(get("/metrics").contentType(MediaType.TEXT_PLAIN))
+        .andExpect(status().isOk());
   }
 
   @Test
