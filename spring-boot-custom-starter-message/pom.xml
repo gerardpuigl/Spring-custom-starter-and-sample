@@ -19,7 +19,7 @@
     </properties>
 
     <dependencies>
-        <!-- Messaging depdencies -->
+        <!-- Messaging dependencies -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-stream-binder-kafka</artifactId>
@@ -43,7 +43,7 @@
             <version>${confluent-kafka.version}</version>
         </dependency>
 
-        <!-- Module Dependencies -->
+        <!-- Module dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
@@ -55,7 +55,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- test -->
+        <!-- Test dependencies-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>

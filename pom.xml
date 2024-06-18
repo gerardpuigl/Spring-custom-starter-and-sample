@@ -18,6 +18,7 @@
     <modules>
         <module>spring-boot-custom-starter-web</module>
         <module>spring-boot-custom-starter-message</module>
+        <module>spring-boot-custom-starter-web-client</module>
         <module>spring-boot-custom-starter-sample-app</module>
     </modules>
 
