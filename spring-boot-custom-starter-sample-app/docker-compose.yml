@@ -1,0 +1,185 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: postgress
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: sample
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: sample
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.2
+    container_name: zookeeper
+    hostname: zookeeper
+    healthcheck:
+      test: nc -z localhost 2181 || exit -1
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka-broker-1:
+    image: confluentinc/cp-kafka:7.5.2
+    container_name: kafka-broker-1
+    healthcheck:
+      test: kafka-topics --bootstrap-server kafka-broker-1:9092 --list
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: on-failure:3
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker-1:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+
+  kafka-broker-2:
+    image: confluentinc/cp-kafka:7.5.2
+    container_name: kafka-broker-2
+    healthcheck:
+      test: kafka-topics --bootstrap-server kafka-broker-2:9092 --list
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: on-failure:3
+    ports:
+      - 39092:39092
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker-2:9092,PLAINTEXT_HOST://localhost:39092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+
+  kafka-broker-3:
+    image: confluentinc/cp-kafka:7.5.2
+    container_name: kafka-broker-3
+    healthcheck:
+      test: kafka-topics --bootstrap-server kafka-broker-3:9092 --list
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: on-failure:3
+    ports:
+      - 49092:49092
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker-3:9092,PLAINTEXT_HOST://localhost:49092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+
+  rest-proxy:
+    image: confluentinc/cp-kafka-rest:7.5.2
+    healthcheck:
+      test: curl --output /dev/null --silent --head --fail http://rest-proxy:8082
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    ports:
+      - "8082:8082"
+    hostname: rest-proxy
+    container_name: rest-proxy
+    environment:
+      KAFKA_REST_HOST_NAME: rest-proxy
+      KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
+      KAFKA_REST_BOOTSTRAP_SERVERS: kafka-broker-1:9092,kafka-broker-2:9092,kafka-broker-3:9092
+      KAFKA_REST_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+    depends_on:
+      kafka-broker-1:
+        condition: service_healthy
+      kafka-broker-2:
+        condition: service_healthy
+      kafka-broker-3:
+        condition: service_healthy
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry:7.5.2
+    container_name: schema-registry
+    hostname: schema-registry
+    healthcheck:
+      test: curl --output /dev/null --silent --head --fail http://schema-registry:8081/subjects
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    ports:
+      - "8081:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:2181
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka-broker-1:9092,kafka-broker-2:9092,kafka-broker-3:9092
+    depends_on:
+      kafka-broker-1:
+        condition: service_healthy
+      kafka-broker-2:
+        condition: service_healthy
+      kafka-broker-3:
+        condition: service_healthy
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop:3.30.0
+    container_name: kafdrop
+    restart: "no"
+    ports:
+      - "9000:9000"
+    environment:
+      KAFKA_BROKERCONNECT: kafka-broker-1:9092,kafka-broker-2:9092,kafka-broker-3:9092
+      SCHEMAREGISTRY_CONNECT: http://schema-registry:8081
+      JVM_OPTS: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
+    depends_on:
+      kafka-broker-1:
+        condition: service_healthy
+      kafka-broker-2:
+        condition: service_healthy
+      kafka-broker-3:
+        condition: service_healthy
+      schema-registry:
+        condition: service_healthy
+
+  schema-registry-ui:
+    image: landoop/schema-registry-ui:0.9.5
+    container_name: schema-registry-ui
+    hostname: schema-registry-ui
+    ports:
+      - "8000:8000"
+    environment:
+      SCHEMAREGISTRY_URL: http://schema-registry:8081
+      PROXY: "true"
+      ALLOW_GLOBAL: "true"
+      ALLOW_TRANSITIVE: "true"
+      ALLOW_DELETION: "true"
+    depends_on:
+      schema-registry:
+        condition: service_healthy
