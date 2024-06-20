@@ -6,7 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @AutoConfiguration
 @PropertySource(value = {"classpath:/webclient.properties"})
-@ComponentScan("com.custom.starter.client")
+@ComponentScan("com.custom.starter.client.*")
 public class WebClientAutoConfig {
 
 }
