@@ -27,6 +27,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.util.MimeType;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.ServletRequestBindingException;
@@ -107,8 +108,10 @@ public class CommonWebErrorHandler {
       MethodArgumentNotValidException ex) {
     log.warn("MethodArgumentNotValidException caught:", ex);
 
-    String title = ex.getClass().getName();
-    String message = getMessage(ex);
+    String title = ex.getClass().getSimpleName();
+    String message = "Error in fields: " +
+        ex.getFieldErrors().stream()
+            .map(FieldError::getField).collect(Collectors.toSet());
 
     BindingResult result = ex.getBindingResult();
     List<InvalidParamDTO> errorList =
