@@ -16,7 +16,6 @@ public record SampleRequestDto(
     @NotBlank
     String type,
     @Size(max = 255)
-    String description
-) {
+    String description) {
 
 }
