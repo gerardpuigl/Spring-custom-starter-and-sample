@@ -1,0 +1,10 @@
+# This configurations will overwrite what has been set in the "applications.yml" file
+# No need to copy all configuration, just put what you need from testing, the rest will be the same as the applications.yml
+
+spring:
+  datasource:
+    url: "jdbc:tc:postgresql:15:///lead"
+    driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
+  liquibase:
+    enabled: true
+

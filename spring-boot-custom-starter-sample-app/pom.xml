@@ -31,6 +31,13 @@
       <version>${custom-starter.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>com.starter.custom.common.library</groupId>
+      <artifactId>spring-boot-custom-starter-persistence</artifactId>
+      <version>${custom-starter.version}</version>
+    </dependency>
+
+
     <!--  Ms dependencies   -->
     <dependency>
       <groupId>org.projectlombok</groupId>
@@ -64,8 +71,14 @@
     </dependency>
 
     <dependency>
-      <groupId>org.testcontainers</groupId>
       <artifactId>junit-jupiter</artifactId>
+      <groupId>org.testcontainers</groupId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <artifactId>postgresql</artifactId>
+      <groupId>org.testcontainers</groupId>
       <scope>test</scope>
     </dependency>
 

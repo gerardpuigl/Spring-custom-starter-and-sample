@@ -1,4 +1,20 @@
 spring:
   application:
     name: ms-sample-app
-
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        default_schema: ${APP_POSTGRESQL_SCHEMA:public}
+    database: POSTGRESQL
+    show-sql: false
+  datasource:
+    url: ${APP_POSTGRESQL_URL:jdbc:postgresql://localhost:5432/sample}
+    username: ${APP_POSTGRESQL_USER_RW:test}
+    password: ${APP_POSTGRESQL_PASSWORD_RW:sample}
+    driverClassName: org.postgresql.Driver
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog-master.xml

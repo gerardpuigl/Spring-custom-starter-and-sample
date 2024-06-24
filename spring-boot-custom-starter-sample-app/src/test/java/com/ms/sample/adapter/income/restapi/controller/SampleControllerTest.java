@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -16,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(classes = SampleApplication.class)
 @AutoConfigureMockMvc
+@ActiveProfiles(profiles = {"test"})
 class SampleControllerTest {
 
   @Autowired(required = false)
@@ -43,12 +45,12 @@ class SampleControllerTest {
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.id").isNotEmpty())
         .andExpect(content().json("""
-          {
-            "name":"name",
-            "description":"test_description",
-            "type":"IN_PROGRESS"
-          }
-        """));
+              {
+                "name":"name",
+                "description":"test_description",
+                "type":"IN_PROGRESS"
+              }
+            """));
   }
 
   @Test
@@ -89,16 +91,16 @@ class SampleControllerTest {
     //then:
     response.andExpect(status().isBadRequest())
         .andExpect(content().json("""
-             {
-               "title":"MethodArgumentNotValidException",
-               "detail":"Error in fields: [name, type]",
-               "code":"spring.application.name-bad-request",
-               "status":400,
-               "invalid_params":[
-                 {"name":"name", "reason":"null: must not be blank"},
-                 {"name":"type", "reason":"null: must not be blank"}
-               ]
-             }
-        """));
+                 {
+                   "title":"MethodArgumentNotValidException",
+                   "detail":"Error in fields: [name, type]",
+                   "code":"spring.application.name-bad-request",
+                   "status":400,
+                   "invalid_params":[
+                     {"name":"name", "reason":"null: must not be blank"},
+                     {"name":"type", "reason":"null: must not be blank"}
+                   ]
+                 }
+            """));
   }
 }

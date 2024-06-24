@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: gerard
+      changes:
+        # Create Postgres enums
+        - sql:
+            sql: CREATE TYPE SAMPLE_TYPE AS ENUM ('IN_PROGRESS', 'DONE', 'ARCHIVED');
+        # Create Sample Initial table
+        - createTable:
+            tableName: sample
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(20)
+              - column:
+                  name: description
+                  type: varchar(255)
+              - column:
+                  name: type
+                  type: SAMPLE_TYPE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: version
+                  type: integer
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_date
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_modified_date
+                  type: datetime
+                  constraints:
+                    nullable: false
