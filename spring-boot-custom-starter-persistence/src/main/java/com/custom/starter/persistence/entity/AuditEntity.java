@@ -1,6 +1,7 @@
 package com.custom.starter.persistence.entity;
 
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.PrePersist;
 import java.time.LocalDateTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
@@ -29,4 +30,9 @@ public abstract class AuditEntity {
   @LastModifiedDate
   @OptimisticLock(excluded = true) // avoid version increase by this field update
   private LocalDateTime lastModifiedDate;
+
+  @PrePersist
+  protected void onCreate() {
+    version = 0;
+  }
 }

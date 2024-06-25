@@ -18,7 +18,6 @@ public class Sample {
   private String name;
   private String description;
   private SampleType type;
-  @Builder.Default
-  private final Integer version = 0;
+  private final Integer version;
 
 }
