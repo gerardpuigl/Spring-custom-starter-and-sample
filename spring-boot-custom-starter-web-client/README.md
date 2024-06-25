@@ -1,9 +1,9 @@
 # Custom Starter Web Client Module
 
-Added libraries and classes related with spring rest client
+Based on spring openfeign, added libraries and classes related with spring rest client and its configuration.
 
 ## What includes?
-1. **Feign client dependencies**
+1. **Feign client dependencies and configurations**
 
 ## Setup
 
