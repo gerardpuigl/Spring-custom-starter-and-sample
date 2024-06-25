@@ -37,6 +37,12 @@
       <version>${custom-starter.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>com.starter.custom.common.library</groupId>
+      <artifactId>spring-boot-custom-starter-message</artifactId>
+      <version>${custom-starter.version}</version>
+    </dependency>
+
 
     <!--  Ms dependencies   -->
     <dependency>

@@ -11,7 +11,6 @@ spring:
       hibernate:
         default_schema: ${APP_POSTGRESQL_SCHEMA:public}
     database: POSTGRESQL
-    show-sql: false
   datasource:
     url: ${APP_POSTGRESQL_URL:jdbc:postgresql://localhost:5432/sample}
     username: ${APP_POSTGRESQL_USER_RW:test}
@@ -20,3 +19,11 @@ spring:
   liquibase:
     enabled: true
     change-log: classpath:/db/changelog-master.xml
+  cloud:
+    stream:
+      bindings:
+        producer-sample-topic:
+          destination: event.sample
+          content-type: application/json
+          producer:
+            useNativeEncoding: true

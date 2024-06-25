@@ -1,9 +1,16 @@
-# Disclaimer: Only for this demo, better use a dev env with authentication system than deactivate security programmatically
 spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          configuration:
+            # in docker-compose.yml we don't have security setup
+            security:
+              protocol: PLAINTEXT
+  # Disclaimer: Only for this demo, better use a dev env with authentication system than deactivate security programmatically
   autoconfigure:
     exclude: >
       org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
-
 custom:
   starter:
     web:
