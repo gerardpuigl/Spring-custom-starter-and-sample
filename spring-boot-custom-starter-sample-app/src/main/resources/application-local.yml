@@ -1,0 +1,11 @@
+# Disclaimer: Only for this demo, better use a dev env with authentication system than deactivate security programmatically
+spring:
+  autoconfigure:
+    exclude: >
+      org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+
+custom:
+  starter:
+    web:
+      security:
+        enable: false

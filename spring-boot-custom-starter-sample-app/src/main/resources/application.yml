@@ -1,6 +1,8 @@
 spring:
   application:
     name: ms-sample-app
+  profiles:
+    active: ${APP_ACTIVE_PROFILE:local}
   jpa:
     open-in-view: false
     hibernate:
