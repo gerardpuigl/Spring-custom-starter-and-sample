@@ -20,7 +20,7 @@ public class CreateSampleUseCase implements CreateSampleInPort {
   private final SampleEventOutPort sampleEventOutPort;
 
   @Override
-//  @Transactional
+  @Transactional
   public Sample createSample(SampleRequest sampleRequest) {
     Sample sample = mapping.createSample(sampleRequest);
     sampleEventOutPort.publishSampleEvent(sample, EventType.SAMPLE_CREATED);

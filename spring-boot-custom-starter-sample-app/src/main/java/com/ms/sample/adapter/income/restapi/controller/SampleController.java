@@ -30,7 +30,7 @@ public class SampleController {
 
   @PostMapping
   @PreAuthorize("hasAnyAuthority('SCOPE_sample:book:create')")
-  @ResponseStatus(HttpStatus.CREATED)
+  @ResponseStatus(HttpStatus.ACCEPTED)
   public SampleResponseDto createSample(@RequestBody @Valid SampleRequestDto sampleRequestDto) {
     Sample sample = createSampleInPort.createSample(mapper.toInPortRequest(sampleRequestDto));
     return mapper.toDto(sample);

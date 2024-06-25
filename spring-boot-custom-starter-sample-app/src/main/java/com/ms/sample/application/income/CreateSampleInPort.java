@@ -9,7 +9,6 @@ public interface CreateSampleInPort {
 
   record SampleRequest(
       String name,
-      String type,
       String description) {
 
   }

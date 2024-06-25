@@ -17,7 +17,8 @@ public class Sample {
   private final UUID id = UUID.randomUUID();
   private String name;
   private String description;
-  private SampleType type;
+  @Builder.Default
+  private SampleType type = SampleType.ACCEPTED;
   private final Integer version;
 
 }

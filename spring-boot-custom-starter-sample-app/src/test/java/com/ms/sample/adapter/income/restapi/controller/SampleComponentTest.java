@@ -50,8 +50,7 @@ class SampleComponentTest {
             .content("""
                 {
                   "name":"name",
-                  "description":"test_description",
-                  "type":"IN_PROGRESS"
+                  "description":"test_description"
                 }
                 """)
             .contentType("application/json")
@@ -59,13 +58,13 @@ class SampleComponentTest {
 
     //then:
     response
-        .andExpect(status().isCreated())
+        .andExpect(status().isAccepted())
         .andExpect(jsonPath("$.id").isNotEmpty())
         .andExpect(content().json("""
               {
                 "name":"name",
                 "description":"test_description",
-                "type":"IN_PROGRESS"
+                "type":"ACCEPTED"
               }
             """));
 
@@ -73,7 +72,7 @@ class SampleComponentTest {
     SampleEventDto payload = objectMapper.convertValue(eventMessage.getPayload(),SampleEventDto.class);
     assertThat(payload.name()).isEqualTo("name");
     assertThat(payload.description()).isEqualTo("test_description");
-    assertThat(payload.type()).isEqualTo("IN_PROGRESS");
+    assertThat(payload.type()).isEqualTo("ACCEPTED");
 
   }
 
@@ -117,12 +116,11 @@ class SampleComponentTest {
         .andExpect(content().json("""
                  {
                    "title":"MethodArgumentNotValidException",
-                   "detail":"Error in fields: [name, type]",
+                   "detail":"Error in fields: [name]",
                    "code":"spring.application.name-bad-request",
                    "status":400,
                    "invalid_params":[
-                     {"name":"name", "reason":"null: must not be blank"},
-                     {"name":"type", "reason":"null: must not be blank"}
+                     {"name":"name", "reason":"null: must not be blank"}
                    ]
                  }
             """));
