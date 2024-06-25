@@ -12,8 +12,8 @@ To start using this module you have to add this dependency in your `pom.xml` fil
 
 ```xml
     <dependency>
-      <groupId>com.wefox.server.starter</groupId>
-      <artifactId>wefox-server-ms-starter-persistence</artifactId>
+      <groupId>com.starter.custom.common.library</groupId>
+      <artifactId>spring-boot-custom-starter-persistence</artifactId>
     </dependency>
 ```
 
