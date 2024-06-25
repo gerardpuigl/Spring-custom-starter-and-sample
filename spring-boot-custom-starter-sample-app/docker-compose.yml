@@ -183,3 +183,5 @@ services:
     depends_on:
       schema-registry:
         condition: service_healthy
+volumes:
+  db:
