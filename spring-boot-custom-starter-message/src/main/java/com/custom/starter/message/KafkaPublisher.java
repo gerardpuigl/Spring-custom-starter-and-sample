@@ -34,10 +34,9 @@ public class KafkaPublisher {
     Message<T> message =
         MessageBuilder.withPayload(eventMessage.getPayload())
             .setHeader(KafkaHeaders.KEY, eventMessage.getKey())
-            .setHeader("created_at",
-                String.valueOf(Instant.now().toEpochMilli()).getBytes(StandardCharsets.UTF_8))
-            .setHeader("created_by", applicationName.getBytes(StandardCharsets.UTF_8))
-            .setHeader("type", eventMessage.getEventType().getBytes(StandardCharsets.UTF_8))
+            .setHeader("created_at", String.valueOf(Instant.now().toEpochMilli()))
+            .setHeader("created_by", applicationName)
+            .setHeader("type", eventMessage.getEventType())
             .build();
 
     transactionalFilter(eventMessage.getTopicBindingName(), message);
@@ -48,11 +47,10 @@ public class KafkaPublisher {
     Message<T> message =
         MessageBuilder.withPayload(commandMessage.getPayload())
             .setHeader(KafkaHeaders.KEY, commandMessage.getKey())
-            .setHeader("created_at",
-                String.valueOf(Instant.now().toEpochMilli()).getBytes(StandardCharsets.UTF_8))
-            .setHeader("created_by", applicationName.getBytes(StandardCharsets.UTF_8))
-            .setHeader("source", commandMessage.getSource().getBytes(StandardCharsets.UTF_8))
-            .setHeader("type", commandMessage.getCommandType().getBytes(StandardCharsets.UTF_8))
+            .setHeader("created_at", String.valueOf(Instant.now().toEpochMilli()))
+            .setHeader("created_by", applicationName)
+            .setHeader("source", commandMessage.getSource())
+            .setHeader("type", commandMessage.getCommandType())
             .build();
 
     transactionalFilter(commandMessage.getTopicBindingName(), message);

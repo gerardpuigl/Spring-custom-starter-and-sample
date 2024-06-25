@@ -96,8 +96,8 @@ class KafkaPublisherTest {
     MessageHeaders messageHeaders = message.getHeaders();
     assertNotNull(messageHeaders.getId());
     assertNotNull(messageHeaders.get("created_at"));
-    assertEquals(decodeToString(messageHeaders.get("created_by")), APP_NAME);
-    assertEquals(decodeToString(messageHeaders.get("type")), EVENT_TYPE);
+    assertEquals(messageHeaders.get("created_by"), APP_NAME);
+    assertEquals(messageHeaders.get("type"), EVENT_TYPE);
     assertEquals(messageHeaders.get(KafkaHeaders.KEY), KEY);
   }
 
@@ -134,9 +134,9 @@ class KafkaPublisherTest {
     MessageHeaders messageHeaders = message.getHeaders();
     assertNotNull(messageHeaders.getId());
     assertNotNull(messageHeaders.get("created_at"));
-    assertEquals(decodeToString(messageHeaders.get("created_by")), APP_NAME);
-    assertEquals(decodeToString(messageHeaders.get("source")), COMMAND_SOURCE);
-    assertEquals(decodeToString(messageHeaders.get("type")), COMMAND_TYPE);
+    assertEquals(messageHeaders.get("created_by"), APP_NAME);
+    assertEquals(messageHeaders.get("source"), COMMAND_SOURCE);
+    assertEquals(messageHeaders.get("type"), COMMAND_TYPE);
     assertEquals(messageHeaders.get(KafkaHeaders.KEY), KEY);
   }
 
@@ -252,9 +252,5 @@ class KafkaPublisherTest {
 
   private CommandMessage getCommandMessage() {
     return new CommandMessage(BINDING_TOPIC_NAME, COMMAND_SOURCE, KEY, KEY);
-  }
-
-  private String decodeToString(Object created_by) {
-    return new String((byte[]) created_by, StandardCharsets.UTF_8);
   }
 }
