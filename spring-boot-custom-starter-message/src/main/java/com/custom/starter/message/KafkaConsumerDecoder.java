@@ -17,7 +17,7 @@ public class KafkaConsumerDecoder {
   public <T> EventMessage<T> decodeGenericMessageToEventMessage(Message<T> event) {
     return new EventMessage<>(
         (String) event.getHeaders().get(KafkaHeaders.RECEIVED_TOPIC),
-        decodeToString(event.getHeaders().get("type")),
+        (String) event.getHeaders().get("type"),
         (String) event.getHeaders().get(KafkaHeaders.RECEIVED_KEY),
         event.getPayload());
   }
@@ -25,16 +25,8 @@ public class KafkaConsumerDecoder {
   public <T> CommandMessage<T> decodeGenericMessageToCommandMessage(Message<T> event) {
     return new CommandMessage<>(
         (String) event.getHeaders().get(KafkaHeaders.RECEIVED_TOPIC),
-        decodeToString(event.getHeaders().get("source")),
-        event.getHeaders().get(KafkaHeaders.RECEIVED_KEY).toString(),
+        (String) event.getHeaders().get("source"),
+        (String) event.getHeaders().get(KafkaHeaders.RECEIVED_KEY),
         event.getPayload());
   }
-
-  private String decodeToString(Object header) {
-    if(header != null) {
-      return new String((byte[]) header, StandardCharsets.UTF_8);
-    }
-    return "";
-  }
-
 }
