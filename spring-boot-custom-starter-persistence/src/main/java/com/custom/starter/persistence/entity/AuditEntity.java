@@ -9,7 +9,7 @@ import lombok.Data;
 import org.hibernate.annotations.OptimisticLock;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.annotation.Version;
+import jakarta.persistence.Version;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @MappedSuperclass
