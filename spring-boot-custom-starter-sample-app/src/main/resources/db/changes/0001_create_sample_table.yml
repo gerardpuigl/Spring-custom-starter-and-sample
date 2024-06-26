@@ -1,11 +1,11 @@
 databaseChangeLog:
   - changeSet:
       id: 1
-      author: gerard
+      author: Gerard
       changes:
         # Create Postgres enums
         - sql:
-            sql: CREATE TYPE SAMPLE_TYPE AS ENUM ('IN_PROGRESS', 'DONE', 'ARCHIVED');
+            sql: CREATE TYPE SAMPLE_PROCESS_STATUS AS ENUM ('ACCEPTED', 'IN_PROGRESS', 'PROCESSED', 'FAILED');
         # Create Sample Initial table
         - createTable:
             tableName: sample
@@ -23,8 +23,8 @@ databaseChangeLog:
                   name: description
                   type: varchar(255)
               - column:
-                  name: type
-                  type: SAMPLE_TYPE
+                  name: process_status
+                  type: SAMPLE_PROCESS_STATUS
                   constraints:
                     nullable: false
               - column:

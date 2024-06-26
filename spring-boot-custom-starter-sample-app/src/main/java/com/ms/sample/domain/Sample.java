@@ -1,6 +1,6 @@
 package com.ms.sample.domain;
 
-import com.ms.sample.domain.enums.SampleType;
+import com.ms.sample.domain.enums.SampleProcessStatus;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +18,7 @@ public class Sample {
   private String name;
   private String description;
   @Builder.Default
-  private SampleType type = SampleType.ACCEPTED;
+  private SampleProcessStatus processStatus = SampleProcessStatus.ACCEPTED;
   private final Integer version;
 
 }

@@ -7,7 +7,7 @@ import lombok.Builder;
 public record SampleEventDto(
     UUID id,
     String name,
-    String type,
+    String processStatus,
     String description
 ) {
 

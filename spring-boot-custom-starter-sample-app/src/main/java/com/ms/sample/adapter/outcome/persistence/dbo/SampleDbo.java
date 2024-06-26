@@ -1,7 +1,7 @@
 package com.ms.sample.adapter.outcome.persistence.dbo;
 
 import com.custom.starter.persistence.entity.AuditEntity;
-import com.ms.sample.adapter.outcome.persistence.dbo.enums.SampleTypeDbo;
+import com.ms.sample.adapter.outcome.persistence.dbo.enums.SampleProcessStatusDbo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -31,8 +31,8 @@ public class SampleDbo extends AuditEntity {
   @Column(name = "description")
   private String description;
 
-  @Column(name = "type", columnDefinition = "SAMPLE_TYPE")
+  @Column(name = "process_status", columnDefinition = "SAMPLE_PROCESS_STATUS")
   @JdbcType(PostgreSQLEnumJdbcType.class)
-  private SampleTypeDbo type;
+  private SampleProcessStatusDbo processStatus;
 
 }

@@ -7,7 +7,7 @@ import lombok.Builder;
 public record SampleResponseDto(
     UUID id,
     String name,
-    String type,
+    String processStatus,
     String description
 ) {
 
