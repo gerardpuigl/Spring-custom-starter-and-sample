@@ -28,15 +28,19 @@ public class StartProcessSampleUseCase implements StartProcessSampleInPort {
   public void execute(UUID sampleId) {
 
     Sample sample = getSample(sampleId);
+    checkIfSampleIsInProgressOrProcessed(sample);
     sample = updateSampleStatus(sample);
     sampleEventOutPort.publishSampleEvent(sample, EventType.SAMPLE_UPDATED_IN_PROGRESS);
 
   }
 
-  private Sample updateSampleStatus(Sample sample) {
-    sample.setProcessStatus(SampleProcessStatus.IN_PROGRESS);
-    sample = persistence.save(sample);
-    return sample;
+  private void checkIfSampleIsInProgressOrProcessed(Sample sample) {
+    SampleProcessStatus processStatus = sample.getProcessStatus();
+
+    if(processStatus.equals(SampleProcessStatus.IN_PROGRESS) || processStatus.equals(SampleProcessStatus.PROCESSED)){
+      throw new CustomRuntimeException(ErrorCodeEnum.SAMPLE_PROCESS_ALREADY_INITIATED.getErrorCode(),
+          "Sample with id %s is already in process or processed.".formatted(sample.getId()));
+    }
   }
 
   private Sample getSample(UUID sampleId) {
@@ -44,5 +48,11 @@ public class StartProcessSampleUseCase implements StartProcessSampleInPort {
         .orElseThrow(() -> new CustomRuntimeException(
             ErrorCodeEnum.SAMPLE_NOT_FOUND.getErrorCode(),
             "Sample with id %s not found, this should never happen.".formatted(sampleId)));
+  }
+
+  private Sample updateSampleStatus(Sample sample) {
+    sample.setProcessStatus(SampleProcessStatus.IN_PROGRESS);
+    sample = persistence.save(sample);
+    return sample;
   }
 }
