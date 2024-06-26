@@ -1,0 +1,7 @@
+# To avoid consume a message and get an error in some component tests
+spring:
+    cloud:
+        stream:
+            bindings:
+                consumer-sample-command-in-0:
+                    destination: non-existing-destination

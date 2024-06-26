@@ -24,6 +24,7 @@ public class CreateSampleUseCase implements CreateSampleInPort {
   public Sample createSample(SampleRequest sampleRequest) {
     Sample sample = mapping.createSample(sampleRequest);
     sampleEventOutPort.publishSampleEvent(sample, EventType.SAMPLE_CREATED);
+    sampleEventOutPort.publishProcessSampleCommand(sample);
     return saveSampleOutPort.save(sample);
   }
 }

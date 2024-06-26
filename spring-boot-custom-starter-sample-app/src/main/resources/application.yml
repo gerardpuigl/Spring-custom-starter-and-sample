@@ -2,7 +2,7 @@ spring:
   application:
     name: ms-sample-app
   profiles:
-    active: ${APP_ACTIVE_PROFILE}
+    active: ${APP_ACTIVE_PROFILE:local}
   jpa:
     open-in-view: false
     hibernate:
@@ -20,10 +20,33 @@ spring:
     enabled: true
     change-log: classpath:/db/changelog-master.xml
   cloud:
+    function:
+      definition: consumer-sample-command;
     stream:
       bindings:
-        producer-sample-topic:
+        producer-sample-event:
           destination: event.sample
           content-type: application/json
           producer:
             useNativeEncoding: true
+        producer-sample-command:
+          destination: command.process.sample
+          content-type: application/json
+          producer:
+            useNativeEncoding: true
+        consumer-sample-command-in-0:
+          destination: command.process.sample
+          content-type: application/json
+          group: sample-app
+          consumer:
+            concurrency: 3
+
+      kafka:
+        bindings:
+          #By default, the Spring cloud retries for a maximum of 3 attempts with one second initial delay,
+          # 2.0 multiplier with each back off with a max delay of 10 seconds.
+          consumer-sample-topic-in-0:
+            consumer:
+              enableDlq: true
+              dlq-partitions: 1
+              dlqName: private.command.process.sample-dlq

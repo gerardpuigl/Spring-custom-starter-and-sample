@@ -1,21 +1,21 @@
 package com.ms.sample.adapter.income.restapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ms.sample.adapter.outcome.event.dto.SampleCommandDto;
 import com.ms.sample.adapter.outcome.event.dto.SampleEventDto;
-import com.ms.sample.domain.Sample;
 import com.ms.sample.infraestructure.main.SampleApplication;
-import lombok.val;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.stream.binder.test.OutputDestination;
 import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration;
 import org.springframework.context.annotation.Import;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.converter.SimpleMessageConverter;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,11 +24,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import org.springframework.util.SerializationUtils;
 
 @SpringBootTest(classes = SampleApplication.class)
 @AutoConfigureMockMvc
-@ActiveProfiles(profiles = {"test"})
+@ActiveProfiles(profiles = {"test", "noconsumer"})
 @Import({TestChannelBinderConfiguration.class})
 class SampleComponentTest {
 
@@ -38,7 +37,7 @@ class SampleComponentTest {
   @Autowired(required = false)
   private OutputDestination output;
 
-  ObjectMapper objectMapper = new ObjectMapper();
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Test
   @DisplayName("Create complete Sample")
@@ -64,15 +63,19 @@ class SampleComponentTest {
               {
                 "name":"name",
                 "description":"test_description",
-                "type":"ACCEPTED"
+                "process_status":"ACCEPTED"
               }
             """));
 
     Message<byte[]> eventMessage = output.receive(1000, "event.sample");
-    SampleEventDto payload = objectMapper.convertValue(eventMessage.getPayload(),SampleEventDto.class);
-    assertThat(payload.name()).isEqualTo("name");
-    assertThat(payload.description()).isEqualTo("test_description");
-    assertThat(payload.type()).isEqualTo("ACCEPTED");
+    SampleEventDto eventPayload = objectMapper.convertValue(eventMessage.getPayload(), SampleEventDto.class);
+    assertThat(eventPayload.name()).isEqualTo("name");
+    assertThat(eventPayload.description()).isEqualTo("test_description");
+    assertThat(eventPayload.processStatus()).isEqualTo("ACCEPTED");
+
+    Message<byte[]> commandMessage = output.receive(1000, "command.process.sample");
+    SampleCommandDto commandPayoad = objectMapper.convertValue(commandMessage.getPayload(), SampleCommandDto.class);
+    assertThat(commandPayoad).isNotNull();
 
   }
 
