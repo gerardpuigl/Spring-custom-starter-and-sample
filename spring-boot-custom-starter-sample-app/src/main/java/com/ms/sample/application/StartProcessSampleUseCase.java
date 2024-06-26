@@ -36,10 +36,9 @@ public class StartProcessSampleUseCase implements StartProcessSampleInPort {
 
   private void checkIfSampleIsInProgressOrProcessed(Sample sample) {
     SampleProcessStatus processStatus = sample.getProcessStatus();
-
     if(processStatus.equals(SampleProcessStatus.IN_PROGRESS) || processStatus.equals(SampleProcessStatus.PROCESSED)){
       throw new CustomRuntimeException(ErrorCodeEnum.SAMPLE_PROCESS_ALREADY_INITIATED.getErrorCode(),
-          "Sample with id %s is already in process or processed.".formatted(sample.getId()));
+          "Sample with id %s is already in progress or processed.".formatted(sample.getId()));
     }
   }
 

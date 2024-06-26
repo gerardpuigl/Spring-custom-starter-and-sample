@@ -4,8 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ms.sample.adapter.outcome.event.dto.SampleCommandDto;
 import com.ms.sample.adapter.outcome.event.dto.SampleEventDto;
 import com.ms.sample.infraestructure.main.SampleApplication;
-import java.time.Instant;
+import java.util.Collections;
 import java.util.UUID;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.MockConsumer;
+import org.apache.kafka.clients.consumer.OffsetResetStrategy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,9 +41,9 @@ class SampleCommandComponentTest {
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Test
-  @DisplayName("Consumer Event that is not processed")
+  @DisplayName("Consumer Sample Command that is not processed")
   @Sql(scripts = "/sql/SampleComponentTest.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
-  public void test_Accept() {
+  public void consumeCommand_OK() {
     //given:
     UUID sampleId = UUID.fromString("e7f936b5-3fca-49d4-800d-6b16a7911c1d");
     SampleCommandDto payload = new SampleCommandDto(sampleId);

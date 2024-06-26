@@ -39,13 +39,15 @@ spring:
           content-type: application/json
           group: sample-app
           consumer:
+            use-native-decoding: true
             concurrency: 3
+
 
       kafka:
         bindings:
           #By default, the Spring cloud retries for a maximum of 3 attempts with one second initial delay,
           # 2.0 multiplier with each back off with a max delay of 10 seconds.
-          consumer-sample-topic-in-0:
+          consumer-sample-command-in-0:
             consumer:
               enableDlq: true
               dlq-partitions: 1
