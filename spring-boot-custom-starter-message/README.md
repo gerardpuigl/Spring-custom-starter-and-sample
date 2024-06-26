@@ -32,8 +32,8 @@ Add configuration for your publishers/producers:
 	    stream:
          bindings:
            your-topic-name:
-             destination: event.team.entity
-             content-type: application/*+avro
+             destination: event.entity
+             content-type: application/json
              producer:
                useNativeEncoding: true
                
@@ -63,14 +63,12 @@ your message will be sent after the transaction is committed.
 #### Component testing with messages
 In order to do component tests, without the need of kafka running in your system, add the following dependency:
 
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-stream</artifactId>
-            <type>test-jar</type>
-            <classifier>test-binder</classifier>
-            <scope>test</scope>
-        </dependency>
-        
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-stream-test-binder</artifactId>
+      <scope>test</scope>
+    </dependency>
+
 Then, in your tests, use the following annotation in your test class:
 	
 	@Import({TestChannelBinderConfiguration.class}) 
