@@ -33,7 +33,7 @@ Based on Spring Jpa and Postgresql, contains persistence dependencies and a clas
 
 [More info.](spring-boot-custom-starter-persistence/README.md)
 
-### **Sample Application that use the Custom Starter Modules*
+### **Sample Application that use some of the modules**
 
 Based on Spring boot, this applications pretends to show how to implement some of the modules on this
 repository also is an example about how I understand the hexagonal architecture.
