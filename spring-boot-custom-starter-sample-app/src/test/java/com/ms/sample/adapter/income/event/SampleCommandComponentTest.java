@@ -6,6 +6,8 @@ import com.ms.sample.adapter.outcome.event.dto.SampleEventDto;
 import com.ms.sample.infraestructure.main.SampleApplication;
 import java.util.UUID;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,11 @@ class SampleCommandComponentTest {
   private OutputDestination outputDestination;
 
   private final ObjectMapper objectMapper = new ObjectMapper();
+
+  @BeforeEach
+  public void cleanEvents() {
+    outputDestination.clear();
+  }
 
   @Test
   @DisplayName("Consumer Sample Command that is not processed")
