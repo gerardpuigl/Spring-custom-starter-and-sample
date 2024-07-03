@@ -35,6 +35,7 @@ public class ProcessSampleUseCase implements ProcessSampleInPort {
 
     EntityTransaction transaction1 = entityManager.getTransaction();
     transaction1.begin();
+    checkIfProcessed(sample);
     sample = updateToInProgress(sample);
     transaction1.commit();
 
@@ -52,20 +53,19 @@ public class ProcessSampleUseCase implements ProcessSampleInPort {
             "Sample with id %s not found, this should never happen.".formatted(sampleId)));
   }
 
-  private Sample updateToInProgress(Sample sample) {
-    checkIfSampleIsInProgressOrProcessed(sample);
-    sample.setProcessStatus(SampleProcessStatus.IN_PROGRESS);
-    sample = persistence.save(sample);
-    sampleEventOutPort.publishSampleEvent(sample, EventType.SAMPLE_UPDATED_IN_PROGRESS);
-    return sample;
-  }
-
-  private void checkIfSampleIsInProgressOrProcessed(Sample sample) {
+  private void checkIfProcessed(Sample sample) {
     SampleProcessStatus processStatus = sample.getProcessStatus();
     if (processStatus.equals(SampleProcessStatus.IN_PROGRESS) || processStatus.equals(SampleProcessStatus.PROCESSED)) {
       throw new CustomRuntimeException(ErrorCodeEnum.SAMPLE_PROCESS_ALREADY_INITIATED.getErrorCode(),
           "Sample with id %s is already in progress or processed.".formatted(sample.getId()));
     }
+  }
+
+  private Sample updateToInProgress(Sample sample) {
+    sample.setProcessStatus(SampleProcessStatus.IN_PROGRESS);
+    sample = persistence.save(sample);
+    sampleEventOutPort.publishSampleEvent(sample, EventType.SAMPLE_UPDATED_IN_PROGRESS);
+    return sample;
   }
 
   private void processSample(Sample sample) {
