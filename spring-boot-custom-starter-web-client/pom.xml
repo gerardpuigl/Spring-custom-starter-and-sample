@@ -16,8 +16,6 @@
     <dependencies>
 
       <!-- Feign Client dependencies -->
-
-
       <dependency>
         <groupId>org.springframework.security</groupId>
         <artifactId>spring-security-oauth2-client</artifactId>
@@ -51,6 +49,7 @@
         <artifactId>spring-boot-starter-test</artifactId>
         <scope>test</scope>
       </dependency>
+
       <dependency>
         <groupId>org.wiremock</groupId>
         <artifactId>wiremock-standalone</artifactId>

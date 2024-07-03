@@ -15,16 +15,17 @@ import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(classes = TestApplication.class,
+//improve test performance
 properties = "spring.cloud.openfeign.client.config.default.readTimeout=100")
-@RequiredArgsConstructor
 public class FeignClientConfigurationTest {
 
-  protected static WireMockServer mockServer;
+  private static WireMockServer mockServer;
 
   @Autowired
   private TestFeignClient feignClient;
@@ -46,24 +47,27 @@ public class FeignClientConfigurationTest {
   }
 
   @Test
+  @DisplayName("Test feign client without non retries.")
   public void feignClient_happyPath() {
 
     mockServer.stubFor(
-        WireMock.get(urlPathMatching("/info"))
+        WireMock.get(urlPathMatching("/test"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
                     .withBody("OK")
                     .withFixedDelay(90)));
+    WireMock.verify(1,getRequestedFor(urlEqualTo("/test")));
     assertThat(feignClient.getInfo()).isEqualTo("OK");
   }
 
   @Test
+  @DisplayName("Test feign client timout after 3 retries.")
   public void feignClient_TimeoutAndRetryer() {
     mockServer.resetRequests();
     mockServer.stubFor(
         WireMock
-            .get(urlPathMatching("/info"))
+            .get(urlPathMatching("/test"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
@@ -72,12 +76,7 @@ public class FeignClientConfigurationTest {
 
     Throwable throwable = catchThrowable(() -> feignClient.getInfo());
 
-    WireMock.verify(3,getRequestedFor(urlEqualTo("/info")));
+    WireMock.verify(3,getRequestedFor(urlEqualTo("/test")));
     assertThat(throwable).isInstanceOf(FeignException.class);
   }
-
-
-
-
-
 }

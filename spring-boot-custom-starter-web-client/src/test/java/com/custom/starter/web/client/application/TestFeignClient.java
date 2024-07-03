@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @FeignClient(name = "TestFeignClient", url = "localhost:8080/")
 public interface TestFeignClient {
 
-  @RequestMapping(method = RequestMethod.GET, value = "/info")
+  @RequestMapping(method = RequestMethod.GET, value = "/test")
   String getInfo();
 }
