@@ -1,7 +1,7 @@
 package com.ms.sample.adapter.income.event;
 
 import com.custom.starter.message.KafkaConsumerDecoder;
-import com.custom.starter.message.domain.EventMessage;
+import com.custom.starter.message.domain.CommandMessage;
 import com.ms.sample.adapter.outcome.event.dto.SampleCommandDto;
 import com.ms.sample.application.income.ProcessSampleInPort;
 import com.ms.sample.application.income.StartProcessSampleInPort;
@@ -22,10 +22,10 @@ public class SampleCommandConsumer implements Consumer<Message<SampleCommandDto>
 
   @Override
   public void accept(Message<SampleCommandDto> event) {
-    EventMessage<SampleCommandDto> eventMessage = kafkaConsumerDecoder.decodeGenericMessageToEventMessage(event);
+    CommandMessage<SampleCommandDto> commandMessage = kafkaConsumerDecoder.decodeGenericMessageToCommandMessage(event);
 
-      log.info("Sample command key: {} consumed to be processed.", eventMessage.getKey());
-      startProcessSampleInPort.execute(eventMessage.getPayload().id());
-      processSampleInPort.execute(eventMessage.getPayload().id());
+    log.info("Sample command key: {} consumed to be processed.", commandMessage.getKey());
+    startProcessSampleInPort.execute(commandMessage.getPayload().id());
+    processSampleInPort.execute(commandMessage.getPayload().id());
   }
 }

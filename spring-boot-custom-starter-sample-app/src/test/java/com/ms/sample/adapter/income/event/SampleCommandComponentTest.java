@@ -54,6 +54,7 @@ class SampleCommandComponentTest {
     Message<SampleCommandDto> message = MessageBuilder.withPayload(payload)
         .setHeader(KafkaHeaders.RECEIVED_TOPIC, "command.process.sample")
         .setHeader(KafkaHeaders.RECEIVED_KEY, sampleId.toString())
+        .setHeader("source", "test")
         .build();
 
     //when:
@@ -83,6 +84,7 @@ class SampleCommandComponentTest {
     Message<SampleCommandDto> message = MessageBuilder.withPayload(payload)
         .setHeader(KafkaHeaders.RECEIVED_TOPIC, "command.process.sample")
         .setHeader(KafkaHeaders.RECEIVED_KEY, sampleId.toString())
+        .setHeader("source", "test")
         .build();
 
     //when:
@@ -113,6 +115,7 @@ class SampleCommandComponentTest {
     Message<SampleCommandDto> message = MessageBuilder.withPayload(payload)
         .setHeader(KafkaHeaders.RECEIVED_TOPIC, "command.process.sample")
         .setHeader(KafkaHeaders.RECEIVED_KEY, sampleId.toString())
+        .setHeader("source", "test")
         .build();
 
     //when:
