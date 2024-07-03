@@ -65,7 +65,7 @@ public class ProcessSampleUseCase implements ProcessSampleInPort {
     //just to simulate failure use case
     if (sample.getDescription().contains("unstable")) {
       throw new CustomRuntimeException(
-          ErrorCodeEnum.SAMPLE_NOT_FOUND.getErrorCode(),
+          ErrorCodeEnum.SAMPLE_PROCESS_FAILED.getErrorCode(),
           "Sample with id %s broken, process failed.".formatted(sample.getId()));
     }
   }
