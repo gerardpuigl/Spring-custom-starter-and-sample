@@ -238,7 +238,7 @@ public class CommonWebErrorHandler {
   }
 
   // Helpers
-  protected ResponseEntity<ErrorDTO> buildResponseEntity(
+  private ResponseEntity<ErrorDTO> buildResponseEntity(
       String title,
       String detail,
       String code,
@@ -250,7 +250,7 @@ public class CommonWebErrorHandler {
     return ResponseEntity.status(status).body(errorDTO);
   }
 
-  protected List<InvalidParamDTO> toDTO(List<InvalidParam> invalidParams) {
+  private List<InvalidParamDTO> toDTO(List<InvalidParam> invalidParams) {
     List<InvalidParamDTO> invalidParamsDTO = new ArrayList<>();
     invalidParams.forEach(
         invalidParam -> {
@@ -259,11 +259,11 @@ public class CommonWebErrorHandler {
     return invalidParamsDTO;
   }
 
-  protected String buildErrorCode(String code) {
+  private String buildErrorCode(String code) {
     return applicationName + "-" + code;
   }
 
-  protected String getMessage(Exception ex) {
+  private String getMessage(Exception ex) {
     if (ex instanceof HttpMessageNotReadableException) {
       return "Request body is empty or malformed";
     } else {
