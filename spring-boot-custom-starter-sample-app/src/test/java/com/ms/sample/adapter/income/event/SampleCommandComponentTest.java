@@ -68,4 +68,56 @@ class SampleCommandComponentTest {
     assertThat(processedPayload.processStatus()).isEqualTo("PROCESSED");
 
   }
+
+  @Test
+  @DisplayName("Consumer Sample Command that process fails")
+  @Sql(scripts = "/sql/SampleComponentTest.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
+  public void consumeCommand_Failed() {
+    //given:
+    UUID sampleId = UUID.fromString("63266b18-fe31-4e41-a409-208e9ae1d643");
+    SampleCommandDto payload = new SampleCommandDto(sampleId);
+
+    Message<SampleCommandDto> message = MessageBuilder.withPayload(payload)
+        .setHeader(KafkaHeaders.RECEIVED_TOPIC, "command.process.sample")
+        .setHeader(KafkaHeaders.RECEIVED_KEY, sampleId.toString())
+        .build();
+
+    //when:
+    inputDestination.send(message);
+
+    //then:
+    Message<byte[]> inProgressMessage = outputDestination.receive(1000, "event.sample");
+    SampleEventDto inProgressPayload = objectMapper.convertValue(inProgressMessage.getPayload(), SampleEventDto.class);
+    assertThat(inProgressPayload.id()).isEqualTo(sampleId);
+    assertThat(inProgressPayload.processStatus()).isEqualTo("IN_PROGRESS");
+
+    Message<byte[]> processedMessage = outputDestination.receive(5100, "event.sample");
+    SampleEventDto processedPayload = objectMapper.convertValue(processedMessage.getPayload(), SampleEventDto.class);
+    assertThat(processedPayload.id()).isEqualTo(sampleId);
+    assertThat(processedPayload.processStatus()).isEqualTo("FAILED");
+
+  }
+
+
+  @Test
+  @DisplayName("Consumer Sample Command that already consumed and processed")
+  @Sql(scripts = "/sql/SampleComponentTest.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
+  public void consumeCommand_already_processed() {
+    //given:
+    UUID sampleId = UUID.fromString("f6049dc9-08fe-490c-8bb2-3d8643c6edb4");
+    SampleCommandDto payload = new SampleCommandDto(sampleId);
+
+    Message<SampleCommandDto> message = MessageBuilder.withPayload(payload)
+        .setHeader(KafkaHeaders.RECEIVED_TOPIC, "command.process.sample")
+        .setHeader(KafkaHeaders.RECEIVED_KEY, sampleId.toString())
+        .build();
+
+    //when:
+    inputDestination.send(message);
+
+    //then:
+    Message<byte[]> inProgressMessage = outputDestination.receive(1000, "event.sample");
+    assertThat(inProgressMessage).isNull();
+
+  }
 }
