@@ -41,8 +41,6 @@ spring:
           consumer:
             use-native-decoding: true
             concurrency: 3
-
-
       kafka:
         bindings:
           #By default, the Spring cloud retries for a maximum of 3 attempts with one second initial delay,
