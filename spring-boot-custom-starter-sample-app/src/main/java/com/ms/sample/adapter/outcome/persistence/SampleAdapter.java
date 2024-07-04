@@ -9,8 +9,6 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -21,7 +19,8 @@ public class SampleAdapter implements SamplePersistenceOutPort {
 
   @Override
   public Sample save(Sample sample) {
-    SampleDbo sampleDbo = repository.save(mapper.toDbo(sample));
+    //Flush to get audit information updated.
+    SampleDbo sampleDbo = repository.saveAndFlush(mapper.toDbo(sample));
     return mapper.toDom(sampleDbo);
   }
 
