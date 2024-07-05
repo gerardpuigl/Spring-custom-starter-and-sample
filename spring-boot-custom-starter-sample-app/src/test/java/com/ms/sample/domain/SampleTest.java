@@ -4,6 +4,7 @@ import com.custom.starter.web.exception.CustomRuntimeException;
 import com.ms.sample.domain.Sample.SampleBuilder;
 import com.ms.sample.domain.enums.SampleProcessStatus;
 import java.util.UUID;
+import org.apache.commons.lang3.RandomStringUtils;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.catchException;
@@ -17,8 +18,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class SampleTest {
 
   @Test
-  @DisplayName("Sample with mandatory information and default values")
-  public void test_sample_mandatory_ok() {
+  @DisplayName("Test sample creation with mandatory properties and default values")
+  public void sampleMandatoryProperties_ok() {
     //when
     Sample sampleName = new SampleBuilder()
         .name("sample_name")
@@ -36,8 +37,8 @@ public class SampleTest {
   }
 
   @Test
-  @DisplayName("Sample with mandatory information and default values")
-  public void test_sample_all_ok() {
+  @DisplayName("Test sample creation with all properties")
+  public void sampleAllProperties_ok() {
     //when
     Sample sampleName = new SampleBuilder()
         .id(UUID.fromString("812402f1-d3cf-4087-b779-2f659d45362c"))
@@ -59,8 +60,8 @@ public class SampleTest {
   }
 
   @Test
-  @DisplayName("New builder validation fails")
-  public void test_sample_validation_fails() {
+  @DisplayName("Test new builder use constructor with validations")
+  public void sampleNewBuilder_useValidations() {
     //when
     Exception exception = catchException(() -> new SampleBuilder()
         .name("")
@@ -71,8 +72,8 @@ public class SampleTest {
   }
 
   @Test
-  @DisplayName("to builder validation fails")
-  public void test_sample_to_builder_and_build_validation_fails() {
+  @DisplayName("Test to builder use constructor with validations")
+  public void sampleToBuilder_useValidations() {
     Sample sampleName = new SampleBuilder()
         .name("sample_name")
         .build();
@@ -83,5 +84,57 @@ public class SampleTest {
         .build()).isExactlyInstanceOf(CustomRuntimeException.class);
   }
 
+  @Test
+  @DisplayName("Test id validations")
+  public void sampleId_validations() {
+    assertThatThrownBy(()->
+        new SampleBuilder()
+            .id(null)
+            .name("sample_name")
+            .build()).isExactlyInstanceOf(CustomRuntimeException.class);
+  }
 
+  @Test
+  @DisplayName("Test name validations")
+  public void sampleName_validations() {
+    assertThatThrownBy(()->
+        new SampleBuilder()
+            .name(null)
+            .build())
+        .isExactlyInstanceOf(CustomRuntimeException.class);
+
+    assertThatThrownBy(()->
+        new SampleBuilder()
+            .name("")
+            .build())
+        .isExactlyInstanceOf(CustomRuntimeException.class);
+
+    assertThatThrownBy(()->
+        new SampleBuilder()
+            .name(RandomStringUtils.random(21))
+            .build())
+        .isExactlyInstanceOf(CustomRuntimeException.class);
+  }
+
+  @Test
+  @DisplayName("Test description validations")
+  public void sampleDescription_validations() {
+    assertThatThrownBy(()->
+        new SampleBuilder()
+            .name("sample_name")
+            .description(RandomStringUtils.random(256))
+            .build())
+        .isExactlyInstanceOf(CustomRuntimeException.class);
+  }
+
+  @Test
+  @DisplayName("Test processStatus validations")
+  public void sampleProcessStatus_validations() {
+    assertThatThrownBy(()->
+        new SampleBuilder()
+            .name("sample_name")
+            .processStatus(null)
+            .build())
+        .isExactlyInstanceOf(CustomRuntimeException.class);
+  }
 }
