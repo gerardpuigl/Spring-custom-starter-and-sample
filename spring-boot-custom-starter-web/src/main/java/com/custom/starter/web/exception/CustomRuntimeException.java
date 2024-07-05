@@ -18,7 +18,7 @@ public class CustomRuntimeException extends RuntimeException {
   private final List<InvalidParam> invalidParams;
 
   @Data
-  class InvalidParam {
+  public class InvalidParam {
     final String name;
     final String reason;
   }

@@ -50,7 +50,10 @@ public class StartProcessSampleUseCase implements StartProcessSampleInPort {
   }
 
   private Sample updateSampleStatus(Sample sample) {
-    sample.setProcessStatus(SampleProcessStatus.IN_PROGRESS);
+    sample = sample.toBuilder()
+        .processStatus(SampleProcessStatus.IN_PROGRESS)
+        .build();
+
     sample = persistence.save(sample);
     return sample;
   }

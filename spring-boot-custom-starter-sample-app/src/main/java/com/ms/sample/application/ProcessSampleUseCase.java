@@ -9,7 +9,6 @@ import com.ms.sample.application.outcome.SamplePersistenceOutPort;
 import com.ms.sample.domain.Sample;
 import com.ms.sample.domain.enums.SampleProcessStatus;
 import com.ms.sample.infraestructure.error.ErrorCodeEnum;
-
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,12 +46,16 @@ public class ProcessSampleUseCase implements ProcessSampleInPort {
       simulateProcessing(sample);
       log.info("Sample id {} processed successfully.", sample.getId());
 
-      sample.setProcessStatus(SampleProcessStatus.PROCESSED);
+      sample = sample.toBuilder()
+          .processStatus(SampleProcessStatus.PROCESSED)
+          .build();
       sampleEventOutPort.publishSampleEvent(sample, EventType.SAMPLE_UPDATED_PROCESSED);
 
     } catch (Exception ex) {
       log.error(ex.getMessage(), ex);
-      sample.setProcessStatus(SampleProcessStatus.FAILED);
+      sample = sample.toBuilder()
+          .processStatus(SampleProcessStatus.PROCESSED)
+          .build();
       sampleEventOutPort.publishSampleEvent(sample, EventType.SAMPLE_UPDATED_FAILED);
     }
     persistence.save(sample);
