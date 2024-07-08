@@ -180,5 +180,85 @@ class GetSamplesByQueryComponentTest {
             """));
   }
 
+  @Test
+  @DisplayName("Get samples by process status and find 1")
+  @WithMockUser(authorities = {"SCOPE_sample:read"})
+  @Sql(scripts = "/sql/SampleComponentTest.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
+  public void getSampleByProcessStatus_OK() throws Exception {
+    //when:
+    ResultActions response = mockMvc.perform(
+        get(new URI(
+            "/sample?process_status=PROCESSED"))
+            .accept("application/json"));
+
+    //then:
+    response
+        .andExpect(status().isOk())
+        .andExpect(content().json("""
+            {
+                "content":[
+                   {
+                      "id":"f6049dc9-08fe-490c-8bb2-3d8643c6edb4",
+                      "name":"Sample Processed",
+                      "process_status":"PROCESSED",
+                      "description":"Solid sample"
+                   }
+                ],
+                "orders":[
+                   {
+                      "property":"createdDate",
+                      "direction":"DESC"
+                   }
+                ],
+                "total_pages":1,
+                "total_elements":1,
+                "page_number":0,
+                "page_size":25
+             }
+            """));
+  }
+
+  @Test
+  @DisplayName("Get samples by process status and find 0")
+  @WithMockUser(authorities = {"SCOPE_sample:read"})
+  @Sql(scripts = "/sql/SampleComponentTest.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
+  public void getSampleByProcessStatus_NonExist() throws Exception {
+    //when:
+    ResultActions response = mockMvc.perform(
+        get(new URI("/sample?process_status=Non%20Existing%20Name"))
+            .accept("application/json"));
+
+    //then:
+    response
+        .andExpect(status().isOk())
+        .andExpect(content().json("""
+            {
+                "content":[],
+                "orders":[
+                   {
+                      "property":"createdDate",
+                      "direction":"DESC"
+                   }
+                ],
+                "total_pages":0,
+                "total_elements":0,
+                "page_number":0,
+                "page_size":25
+             }
+            """));
+  }
+
+  @Test
+  @DisplayName("Get by query params endpoint protected")
+  @WithMockUser(authorities = {"SCOPE_wrong_scope"})
+  public void createSample_endpointProtected() throws Exception {
+    //when:
+    ResultActions response = mockMvc.perform(
+        get("/sample").accept("application/json"));
+
+    //then:
+    response.andExpect(status().isForbidden());
+  }
+
 
 }
