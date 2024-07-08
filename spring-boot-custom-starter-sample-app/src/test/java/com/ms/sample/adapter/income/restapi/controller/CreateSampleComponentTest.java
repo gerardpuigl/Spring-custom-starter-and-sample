@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles(profiles = {"test", "noconsumer"})
 @Import({TestChannelBinderConfiguration.class})
-class SampleComponentTest {
+class CreateSampleComponentTest {
 
   @Autowired(required = false)
   private MockMvc mockMvc;
@@ -39,7 +39,7 @@ class SampleComponentTest {
 
   @Test
   @DisplayName("Create complete Sample")
-  @WithMockUser(authorities = {"SCOPE_sample:book:create"})
+  @WithMockUser(authorities = {"SCOPE_sample:create"})
   public void createSample_Complete() throws Exception {
     //when:
     ResultActions response = mockMvc.perform(
@@ -100,7 +100,7 @@ class SampleComponentTest {
 
   @Test
   @DisplayName("Post dto constraint")
-  @WithMockUser(authorities = {"SCOPE_sample:book:create"})
+  @WithMockUser(authorities = {"SCOPE_sample:create"})
   public void createSample_constraints() throws Exception {
     //when:
     ResultActions response = mockMvc.perform(

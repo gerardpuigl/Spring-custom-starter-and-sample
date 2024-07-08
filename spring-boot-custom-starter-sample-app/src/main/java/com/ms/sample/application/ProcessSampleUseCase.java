@@ -54,7 +54,7 @@ public class ProcessSampleUseCase implements ProcessSampleInPort {
     } catch (Exception ex) {
       log.error(ex.getMessage(), ex);
       sample = sample.toBuilder()
-          .processStatus(SampleProcessStatus.PROCESSED)
+          .processStatus(SampleProcessStatus.FAILED)
           .build();
       sampleEventOutPort.publishSampleEvent(sample, EventType.SAMPLE_UPDATED_FAILED);
     }

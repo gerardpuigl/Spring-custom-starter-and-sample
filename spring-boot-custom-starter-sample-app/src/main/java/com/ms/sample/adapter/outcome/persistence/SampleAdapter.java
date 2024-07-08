@@ -8,15 +8,16 @@ import com.ms.sample.domain.Sample;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
 public class SampleAdapter implements SamplePersistenceOutPort {
 
   private final SampleJpaRepository repository;
+  private final SampleSpecificationFactory specificationFactory;
   private final SampleDboMapper mapper;
 
   @Override
@@ -28,5 +29,10 @@ public class SampleAdapter implements SamplePersistenceOutPort {
   @Override
   public Optional<Sample> findById(UUID sampleId) {
     return repository.findById(sampleId).map(mapper::toDom);
+  }
+
+  @Override
+  public Page<Sample> getSampleByParams(GetSampleParamRequest request, Pageable pageable) {
+    return repository.findAll(specificationFactory.getSpecifications(request),pageable).map(mapper::toDom);
   }
 }

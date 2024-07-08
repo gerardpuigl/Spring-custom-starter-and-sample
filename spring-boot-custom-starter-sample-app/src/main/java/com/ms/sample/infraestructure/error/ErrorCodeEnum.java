@@ -11,7 +11,8 @@ public enum ErrorCodeEnum {
   UNEXPECTED_SAMPLE_NOT_FOUND(new ErrorCode("Unexpected sample not found", "SP_02", 500)),
   SAMPLE_PROCESS_ALREADY_INITIATED(new ErrorCode("The sample is already being processed", "SP_03", 409)),
   SAMPLE_PROCESS_FAILED(new ErrorCode("The sample process failed", "SP_04", 500)),
-  SAMPLE_DOMAIN_VALIDATION(new ErrorCode("The sample domain validation failed", "SP_05", 500));
+  SAMPLE_DOMAIN_VALIDATION(new ErrorCode("The sample domain validation failed", "SP_05", 500)),
+  WRONG_PARAM(new ErrorCode("Wrong param provided", "SP_06", 400)),;
 
   private final ErrorCode errorCode;
 

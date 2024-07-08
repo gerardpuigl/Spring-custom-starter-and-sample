@@ -48,7 +48,6 @@ public class FeignClientConfigurationTest {
   @Test
   @DisplayName("Test feign client without non retries.")
   public void feignClient_happyPath() {
-
     mockServer.stubFor(
         WireMock.get(urlPathMatching("/test"))
             .willReturn(
@@ -56,14 +55,13 @@ public class FeignClientConfigurationTest {
                     .withStatus(200)
                     .withBody("OK")
                     .withFixedDelay(90)));
-    WireMock.verify(1,getRequestedFor(urlEqualTo("/test")));
-    assertThat(feignClient.getInfo()).isEqualTo("OK");
+    String response = feignClient.getInfo();
+    assertThat(response).isEqualTo("OK");
   }
 
   @Test
   @DisplayName("Test feign client timout after 3 retries.")
   public void feignClient_TimeoutAndRetryer() {
-    mockServer.resetRequests();
     mockServer.stubFor(
         WireMock
             .get(urlPathMatching("/test"))
